@@ -1,7 +1,6 @@
-// @flow
 import axios from 'axios';
 
-export const BASE_API_URL: string = `${process.env.REACT_APP_BASE_API_URL || 'localhost:3000'}`;
+const BASE_API_URL = `${process.env.REACT_APP_BASE_API_URL}`;
 
 const customAxios = axios.create({
   baseURL: BASE_API_URL,
@@ -16,4 +15,4 @@ customAxios.interceptors.response.use(
   },
 );
 
-export default { customAxios };
+export default customAxios ;
