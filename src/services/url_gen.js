@@ -5,7 +5,7 @@ class LinkGen {
 
   static linkThread(id,post="") {
     const tmp = post ? `#post${post}` : '';
-    return `/showthread.php?p=${id}${tmp}`;
+    return `/showthread.php?t=${id}${tmp}`;
   }
 
   static linkInbox() {

@@ -15,11 +15,17 @@ function getUserId(data){
 
 function getPageNumber($) {
   let tmp = $('.pagenav td.vbmenu_control[style]').html();
+  if (tmp)
+    return {
+      subject: $('td.navbar').text().trim(),
+      last_page: tmp.split('of')[1].trim(),
+      page : tmp.split('of')[0].split('Page')[1].trim(),
+    };
   return {
     subject: $('td.navbar').text().trim(),
-    last_page: tmp.split('of')[1].trim(),
-    page : tmp.split('of')[0].split('Page')[1].trim(),
-  };
+    last_page: 1,
+    page: 1,
+  }
 }
 
 // template bbcode_quote
@@ -27,7 +33,9 @@ function getQuoteFromDivQuote($, quote) {
   let out = {};
   out.by = $(quote).find('tr > td.alt2 > div:first-child > strong').text();
   out.url = $(quote).find('tr > td > div:first-child > a').attr('href');
-  out.content = format($(quote).find('tr > td.alt2 > div:last-child'));
+  if ($(quote).find('tr > td.alt2 > div:last-child').length)
+    out.content = format($(quote).find('tr > td.alt2 > div:last-child'));
+  else out.content = format($(quote).find('tr > td.alt2'));
   return out;
 }
 

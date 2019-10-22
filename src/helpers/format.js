@@ -27,8 +27,7 @@ function formatYoutubeLink(data){
 }
 
 function removeComment(str) {
-  let data = str.replace(/<\!--.*?-->/g, "");
-  return data;
+  return str.replace(/<\!--.*?-->/g, "");
 }
 
 // data is node
