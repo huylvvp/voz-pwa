@@ -8,7 +8,9 @@ import customAxios from '../../services/requests';
 import LinkGen from '../../services/url_gen';
 
 
-function Index() {
+function Index(props) {
+
+  console.log(props);
   function onForum() {
     customAxios.get(LinkGen.linkForum(6))
       .then(res=>{

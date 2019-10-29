@@ -1,10 +1,10 @@
 import {combineReducers} from 'redux';
-import test from './test';
-import counter from './counter';
+import layout from './layout';
+import ui from './ui';
 
 const rootReducer = combineReducers({
-    count: counter,
-    test: test
+    ui: ui,
+    layout: layout
 });
 
 export default rootReducer;
