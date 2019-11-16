@@ -24,6 +24,9 @@ class LinkGen {
     return `/search.php?searchid=${id}`;
   }
 
+  static linkLogin() {
+    return `/login.php?do=login`;
+  }
 
 }
 

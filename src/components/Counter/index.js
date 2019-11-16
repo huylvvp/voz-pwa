@@ -6,6 +6,7 @@ import "./Counter.css";
 import parser from '../../services/parser';
 import customAxios from '../../services/requests';
 import LinkGen from '../../services/url_gen';
+import auth from "services/auth";
 
 
 function Index(props) {
@@ -17,7 +18,7 @@ function Index(props) {
         console.log(parser.extractDataForum(res.data));
       })
   }
-
+  
   function onThread() {
     console.log(parser.extractDataThread(threadData2));
   }
@@ -37,9 +38,15 @@ function Index(props) {
   function onSubscription() {
     console.log(parser.extractSubscription(subscription));
   }
-
+  
   function onSearch() {
     console.log(parser.extractSearchContent(searchData));
+  }
+
+  function onLogin() {
+    let username = 'tralaw123';
+    let password = 'nghia123';
+    auth.login(username, password);
   }
   return (
     <div className="Counter">
@@ -52,6 +59,7 @@ function Index(props) {
         <button onClick={onMessage}>Message Detail</button>
         <button onClick={onSubscription}>Subscription</button>
         <button onClick={onSearch}>Search List</button>
+        <button onClick={onLogin}>Test Login</button>
       </div>
     </div>
   );
