@@ -10,7 +10,7 @@ customAxios.interceptors.response.use(
   response => response,
   error => {
     // Add logic to handle error here
-
+    
     return Promise.reject(error);
   },
 );
