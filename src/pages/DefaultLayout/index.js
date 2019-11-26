@@ -18,6 +18,9 @@ const useStyles = makeStyles({
   fullList: {
     width: 'auto',
   },
+  appBar: {
+    boxShadow: 'none'
+  }
 });
 
 export default function SwipeableTemporaryDrawer() {
@@ -34,11 +37,10 @@ export default function SwipeableTemporaryDrawer() {
   };
 
   return (
-    <div>
-      <AppBar/>
-      <div style={ui.loading ? {display: 'none'}:{}}>
+    <>
+      <div style={ui.loading ? { display: 'none' } : {display: 'block'}}>
         <Suspense
-          fallback={<CircularProgress className={classes.progress} variant="determinate" value={ui.loading} />}
+          fallback={<CircularProgress className={classes.progress} variant="determinate" value={ui.loading}/>}
         >
           <Switch>
             {routes.map(route =>
@@ -48,15 +50,18 @@ export default function SwipeableTemporaryDrawer() {
                   path={route.path}
                   exact={route.exact}
                   name={route.name}
-                  render={restProps => <route.component {...restProps} title={route.name} />}
+                  render={restProps => <route.component {...restProps} title={route.name}/>}
                 />
               ) : null,
             )}
           </Switch>
         </Suspense>
       </div>
-      <div style = {{display: 'flex', marginTop: '40vh', justifyContent: 'center'}}>
-        <CircularProgress style={!ui.loading ? {display:'none'}:{}} color={'secondary'}/>
+      <div  style={!ui.loading ? {display:'none'}:{display: 'block'}} >
+        <AppBar style={{boxShadow: 'none'}}/>
+        <div style = {{display: 'flex', marginTop: '40vh', justifyContent: 'center'}}>
+          <CircularProgress color={'secondary'}/>
+        </div>
       </div>
       <SwipeableDrawer
         open={ui.openDrawer.left}
@@ -73,7 +78,7 @@ export default function SwipeableTemporaryDrawer() {
       >
         <RightDrawer/>
       </SwipeableDrawer>
-    </div>
+    </>
   );
 }
 

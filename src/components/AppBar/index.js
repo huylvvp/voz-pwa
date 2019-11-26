@@ -10,12 +10,18 @@ import SearchIcon from '@material-ui/icons/Search';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import InputBase from '@material-ui/core/InputBase';
 import CloseIcon from '@material-ui/icons/Close';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 
 import * as actUi from '../../actions/ui';
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
+  },
+  appBar: {
+    boxShadow: 'none'
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -31,12 +37,22 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Appbar() {
+export default function Appbar(props) {
   const classes = useStyles();
+  const {menuAction} = props;
   const layout =  useSelector(state => state.layout);
   const ui = useSelector(state => state.ui);
   const dispatch = useDispatch();
   const searchRef = useRef(null);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = event => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   function onClickSearch() {
     dispatch(actUi.toggleSearch(!ui.openSearch));
@@ -46,10 +62,8 @@ export default function Appbar() {
       // searchRef.current.focus();
     }
   }
-
   return (
-    <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="sticky" className={classes.appBar}>
         <Toolbar className={classes.toolbar + classes.root}>
           {
             ui.openSearch ?
@@ -89,11 +103,27 @@ export default function Appbar() {
           >
             <SearchIcon/>
           </IconButton>
-          <IconButton edge="end" color="inherit">
+          <IconButton edge="end" color="inherit" onClick={handleClick} aria-controls="simple-menu" aria-haspopup="true">
             <MoreIcon />
           </IconButton>
         </Toolbar>
+        {menuAction ?
+        <div>
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            {menuAction.map(menu=>(
+              <MenuItem onClick={()=>handleClose()&menu.action()} key={menu.name}>{menu.name}</MenuItem>
+            ))}
+          </Menu>
+        </div>
+          :''
+        }
+        {props.children}
       </AppBar>
-    </div>
   );
 }

@@ -20,10 +20,10 @@ const ui = (state = initState, action) => {
         ...state,
         title: action.payload
       };
-    case 'setLocation':
+    case 'setLoading':
       return {
         ...state,
-        location: action.payload
+        loading: action.payload
       };
     case 'setOpenDrawer':
       return {

@@ -182,7 +182,7 @@ function extractDataInbox(data){
     output.id = content.attr('id').split('m')[1];
     output.date = content.find('> div > span').first().text();
     output.title = content.find('> div > a').text();
-    output.time = content.find('> div[class="time"] > span[class]').text();
+    output.time = content.find('> div > span[class="time"] ').text();
     let tmp = content.find('> div[class] > span:last-child');
     output.author = {
       id: tmp.attr('onclick').split('=')[2],
