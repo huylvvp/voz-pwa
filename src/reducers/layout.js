@@ -1,7 +1,9 @@
+import {forum} from '../constants/forum'
+
 const initState = {
   title : 'Voz-PWA',
   location: '0-0',
-  login: false,
+  login: true,
   account: {},
   data: {
     forum: {},
@@ -10,14 +12,35 @@ const initState = {
     message: {},
   },
   bookmark:{
-    forum: [],
-    thread: [],
+    forum: [
+      {
+        id: 17,
+        text: 'Chuyện trò linh tinh™'
+      },
+      {
+        id: 33,
+        text: 'Điểm báo'
+      },
+    ],
+    thread: [
+      {
+        id: 4289698,
+        text: '[Chia sẻ] Góc tâm sự, than thở hằng ngày'
+      }
+    ],
+    post: [
+      {
+        id: '4289698/4#post148759524',
+        text: 'Thuyvan dạo này ăn chơi trác táng nơi đâu? Mà để gió đệ lộng hành thế nhỉ '
+      }
+    ]
   }
 };
 
 const ui = (state = initState, action) => {
   console.log(action);
   console.log(state);
+  let tmp, tmp2;
   switch (action.type) {
     case 'setTitle':
       return {
@@ -92,7 +115,16 @@ const ui = (state = initState, action) => {
         }
       };
     case 'saveForum':
-      let tmp = [...state.bookmark.forum].push(action.payload);
+      tmp = [...state.bookmark.forum];
+      if (tmp.every(value => value.id != action.payload))
+        forum.forEach(val=>{
+          if (val[1] == action.payload) {
+            tmp.push({
+              id: action.payload,
+              text: val[0]
+            });
+          }
+        });
       return {
         ...state,
         bookmark: {
@@ -101,12 +133,70 @@ const ui = (state = initState, action) => {
         }
       };
     case 'saveThread':
-      let tmp2 = [...state.bookmark.thread].push(action.payload);
+      tmp = [...state.bookmark.thread];
+      if (tmp.every(value => value.id != action.payload.id))
+        tmp.push({
+          id: action.payload.id,
+          text: action.payload.text
+        });
       return {
         ...state,
         bookmark: {
           ...state.bookmark,
           thread: tmp
+        }
+      };
+    case 'savePost':
+      tmp = [...state.bookmark.post];
+      if (tmp.every(value => value.id != action.payload.id))
+        tmp.push({
+          id: action.payload.id,
+          text: action.payload.text
+        });
+      return {
+        ...state,
+        bookmark: {
+          ...state.bookmark,
+          post: tmp
+        }
+      };
+    case 'removeForum':
+      tmp2 = state.bookmark.forum.filter((value,index)=>{
+        if (value.id === action.payload)
+          return false;
+        return true;
+      });
+      return {
+        ...state,
+        bookmark: {
+          ...state.bookmark,
+          forum: tmp2
+        }
+      };
+    case 'removeThread':
+      tmp2 = state.bookmark.thread.filter((value)=>{
+        if (value.id === action.payload)
+          return false;
+        return true;
+      });
+      return {
+        ...state,
+        bookmark: {
+          ...state.bookmark,
+          thread: tmp2
+        }
+      };
+    case 'removePost':
+      tmp2 = state.bookmark.post.filter((value)=>{
+        if (value.id === action.payload)
+          return false;
+        return true;
+      });
+      return {
+        ...state,
+        bookmark: {
+          ...state.bookmark,
+          post: tmp2
         }
       };
     default:

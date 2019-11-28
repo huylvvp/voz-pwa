@@ -8,6 +8,7 @@ import MessDetail from './pages/Message/MessDetail';
 
 const routes = [
   { path: '/home', exact: true, name: 'Home', component: Home },
+  { path: '/', exact: true, name: 'Home', component: Home },
   { path: '/test', name: 'Counter', component: Counter0 },
   { path: '/forum/:forum/:page', exact: true, name: 'Forum display', component: Forum },
   { path: '/forum/:forum', exact: true, name: 'Forum display', component: Forum },

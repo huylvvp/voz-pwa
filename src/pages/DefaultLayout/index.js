@@ -58,7 +58,7 @@ export default function SwipeableTemporaryDrawer() {
         </Suspense>
       </div>
       <div  style={!ui.loading ? {display:'none'}:{display: 'block'}} >
-        <AppBar style={{boxShadow: 'none'}}/>
+        <AppBar style={{boxShadow: 'none'}} disableMenu={true}/>
         <div style = {{display: 'flex', marginTop: '40vh', justifyContent: 'center'}}>
           <CircularProgress color={'secondary'}/>
         </div>

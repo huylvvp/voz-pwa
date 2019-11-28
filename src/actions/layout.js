@@ -64,6 +64,12 @@ export function saveForum(id) {
   return {type: 'saveForum', payload: id};
 }
 
-export function saveThread(id) {
-  return {type: 'saveThread', payload: id};
+export function saveThread(id,text) {
+  return {
+    type: 'saveThread',
+    payload: {
+      id: id,
+      text: text,
+    },
+  };
 }

@@ -39,7 +39,7 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: 0,
   },
   divider: {
-    marginTop: 5
+    marginTop: 1
   }
 }));
 

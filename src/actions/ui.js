@@ -9,4 +9,3 @@ export function toggleDrawer(position, show=true){
   tmp[position] = show;
   return {type:'setOpenDrawer',payload: tmp}
 }
-

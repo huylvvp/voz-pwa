@@ -16,6 +16,7 @@ import Slide from '@material-ui/core/Slide';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import TextField from '@material-ui/core/TextField';
 import Input from '@material-ui/core/Input';
+import Editor from './Editor';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -25,6 +26,9 @@ const useStyles = makeStyles(theme => ({
     marginLeft: theme.spacing(2),
     flex: 1,
   },
+  toolIcon: {
+    flexGrow: 1,
+  }
 }));
 
 export default function Reply(props) {
@@ -52,17 +56,7 @@ export default function Reply(props) {
           </Toolbar>
         </AppBar>
         <div>
-          <TextField
-            id="reply-form"
-            label="Reply"
-            multiline
-            fullWidth
-            rows="10"
-            variant="standard"
-            style={{marginLeft:10,marginTop: 10}}
-            value={text}
-            onChange={(e)=>setText(e.target.value)}
-          />
+         <Editor onChange={t=>setText(t)} initValue={text}/>
         </div>
       </Dialog>
     </div>

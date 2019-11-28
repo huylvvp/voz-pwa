@@ -2,9 +2,13 @@ import React from 'react';
 import { Route, Router, Switch } from 'react-router-dom';
 import history from './helpers/history';
 import './App.scss';
+import Pepe from './scss/Pepe.png';
 
-const loading = () => <div className="animated fadeIn pt-3 text-center">Loading...</div>;
-
+const loading = () => (
+  <div className="animated fadeIn pt-3 text-center">
+    <img src={Pepe} width={'100%'} alt={'launch'}/>
+  </div>
+);
 const DefaultLayout = React.lazy(() => import('pages/DefaultLayout'));
 
 function App() {

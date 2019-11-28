@@ -106,12 +106,12 @@ const Quote = (props) =>{
 
 export default function PostCard(props) {
   const classes = useStyles();
-  const {data,number,disableQuoteLink, copyLink, rep, onRep} = props;
+  const {data,number,disableQuoteLink, copyLink, rep, onRep,bookmark} = props;
 
   return (
     <Card id={`post${data.id}`}>
       <div className={classes.top}>
-        <BookmarkIcon fontSize={'small'}/>
+        <BookmarkIcon fontSize={'small'} onClick={bookmark}/>
         <LinkIcon fontSize={'small'} onClick={copyLink}/>
         <Typography className={classes.smallWhite}>{data.time}</Typography>
         <div style={{display: 'flex', flexGrow:1, justifyContent: 'flex-end'}}>
@@ -154,7 +154,8 @@ export default function PostCard(props) {
             <Typography variant={'h6'} color={'primary'}>
               {data.user.username}
             </Typography>
-            <FiberManualRecordIcon className={classes.online} />
+            {data.user.online && <FiberManualRecordIcon className={classes.online} />}
+
           </div>
         }
         subheader={

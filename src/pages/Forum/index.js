@@ -16,7 +16,6 @@ export default function Forum(props) {
   const dispatch = useDispatch();
   const forum = useSelector(state=>state.layout.data.forum[where.forum]);
   const [openCreate, setOpen] = React.useState(false);
-  const menuPop = [{name: 'Bookmark forum', action: bookmark },{name: 'Show bookmark', action: showRightDrawer}];
 
   useEffect(()=>{
     dispatch(act.getDataForum(where.forum,where.page));
@@ -38,13 +37,17 @@ export default function Forum(props) {
     dispatch(act.saveForum(where.forum))
   }
 
+  function refresh() {
+
+  }
+
   function showRightDrawer() {
     dispatch(actUi.toggleDrawer('right'));
   }
 
   return (
     <>
-      <AppBar style={{boxShadow: 'none'}} menuAction={menuPop}>
+      <AppBar style={{boxShadow: 'none'}} onAdd={bookmark} onRefresh={refresh}>
         <Pagination page={where.page||1} maxPage={forum ? forum.last_page : where.page} onChangePage={onChangePage}/>
       </AppBar>
       <div>

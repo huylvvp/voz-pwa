@@ -12,9 +12,12 @@ import InputBase from '@material-ui/core/InputBase';
 import CloseIcon from '@material-ui/icons/Close';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-
 import * as actUi from '../../actions/ui';
 import Button from '@material-ui/core/Button';
+import StarIcon from '@material-ui/icons/Star';
+import { ListItemIcon } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+import RefreshIcon from '@material-ui/icons/Refresh';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -39,7 +42,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function Appbar(props) {
   const classes = useStyles();
-  const {menuAction} = props;
+  const {onRefresh, onAdd, disableMenu} = props;
   const layout =  useSelector(state => state.layout);
   const ui = useSelector(state => state.ui);
   const dispatch = useDispatch();
@@ -50,6 +53,20 @@ export default function Appbar(props) {
     setAnchorEl(event.currentTarget);
   };
 
+  const handleRefresh = () => {
+    handleClose();
+    onRefresh();
+  };
+
+  const handleAdd = () => {
+    handleClose();
+    onAdd();
+  };
+
+  const handleShow = () => {
+    handleClose();
+    dispatch(actUi.toggleDrawer('right', true));
+  };
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -91,7 +108,6 @@ export default function Appbar(props) {
             {layout.title}
           </Typography>
           <InputBase
-            id = {'search-input'}
             className={classes.root}
             style={ui.openSearch ? {color: 'white'}: {color: 'white',display: 'none'}}
             placeholder="Tìm kiếm ..."
@@ -107,22 +123,36 @@ export default function Appbar(props) {
             <MoreIcon />
           </IconButton>
         </Toolbar>
-        {menuAction ?
         <div>
-          <Menu
-            id="simple-menu"
-            anchorEl={anchorEl}
-            keepMounted
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-          >
-            {menuAction.map(menu=>(
-              <MenuItem onClick={()=>handleClose()&menu.action()} key={menu.name}>{menu.name}</MenuItem>
-            ))}
-          </Menu>
+          {!disableMenu ?
+            <Menu
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={handleRefresh}>
+                <ListItemIcon>
+                  <RefreshIcon/>
+                </ListItemIcon>
+                {'Làm mới'}
+              </MenuItem>
+              <MenuItem onClick={handleAdd}>
+                <ListItemIcon>
+                  <AddIcon/>
+                </ListItemIcon>
+                {'Thêm đánh dấu '}
+              </MenuItem>
+              <MenuItem onClick={handleShow}>
+                <ListItemIcon>
+                  <StarIcon/>
+                </ListItemIcon>
+                {'Xem đánh dấu '}
+              </MenuItem>
+            </Menu>
+            :''
+          }
         </div>
-          :''
-        }
         {props.children}
       </AppBar>
   );

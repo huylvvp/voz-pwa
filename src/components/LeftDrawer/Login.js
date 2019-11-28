@@ -30,27 +30,26 @@ export default function Login(props) {
         style={{
           width: '100%',
         }}
+        component={'div'}
         onClick={handleClick}
       >
         { layout.login ?
           <div style={{display:'flex', flexGrow: 1}}>
-            <Button>
-            <Avatar
-              alt={layout.account.username}
-              style={{
-                margin: 10,
-                color: '#fff',
-                backgroundColor: '#7986cb',
-                zoom: 1.3
-              }}
-            >
-              {'T'}
-            </Avatar>
-            <div style={{display: 'flex',flexDirection: 'column', justifyContent: 'center'}}>
-              <Typography variant={'h5'}> Hello</Typography>
-              <Typography variant={'subtitle1'}> Hello</Typography>
-            </div>
-            </Button>
+              <Avatar
+                alt={layout.account.username}
+                style={{
+                  margin: 10,
+                  color: '#fff',
+                  backgroundColor: '#7986cb',
+                  zoom: 1.3
+                }}
+              >
+                {'T'}
+              </Avatar>
+              <div style={{display: 'flex',flexDirection: 'column', justifyContent: 'center'}}>
+                <Typography variant={'h5'}> Hello</Typography>
+                <Typography variant={'subtitle1'}> Hello</Typography>
+              </div>
           </div>
           :
           <div style={{display:'flex', flexGrow: 1}}>

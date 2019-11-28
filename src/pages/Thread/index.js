@@ -8,15 +8,17 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Slide from '@material-ui/core/Slide';
 import Fab from '@material-ui/core/Fab';
 import CreateIcon from '@material-ui/icons/Create';
-import Reply from '../../components/PostCard/Reply';
+import Reply from '../../components/Reply';
 import HTML2BBCode from 'html2bbcode';
 import AppBar from '../../components/AppBar';
+import {html2text} from '../../helpers/string';
 
 export default function Thread(props) {
   let where ={page: 1};
   where = {...where, ... props.match.params };
   const dispatch = useDispatch();
-  const login = useSelector(state => !state.layout.login);
+  const title = useSelector(state=>state.layout.title);
+  const login = useSelector(state => state.layout.login);
   const thread = useSelector(state=>state.layout.data.thread[where.thread]);
   const [open, setOpen] = React.useState(false);
   const [openReply, setOpenReply] = React.useState(false);
@@ -24,12 +26,26 @@ export default function Thread(props) {
   const [transition,setTran] = React.useState(undefined);
   const [replyList, setReplyList] = React.useState([]);
   const [preText, setPreText] = React.useState('');
-
+  const refs = [];
   useEffect(()=>{
-    console.log(HTML2BBCode);
     setTran(()=> TransitionUp);
     dispatch(act.getDataThread(where.thread,where.page));
+    if (props.location.hash){
+      console.log(props);
+      let tmp;
+      let t = setInterval(()=>{
+        tmp = document.getElementById(props.location.hash.split('#')[1]);
+        if (tmp){
+          tmp.scrollIntoView({behavior: 'smooth'});
+          clearInterval(t);
+        }
+      },1000);
+    }
   },[props.location]);
+
+  useEffect(()=>{
+    setPreText(getTextReply(replyList));
+  },[replyList]);
 
   function onChangePage(n) {
     props.history.replace(`/thread/${where.thread}/${n}`);
@@ -48,19 +64,18 @@ export default function Thread(props) {
   }
   function copyLink(id,post){
     navigator.clipboard.writeText('https://forums.voz.vn'+LinkGen.linkThread(id,post));
-    setNoti('Copied link to clipboard');
+    setNoti('Đã copy link');
     handleOpenNoti();
   }
 
   function repPost(post) {
-    setNoti('Added to quote');
-    handleOpenNoti();
+    setNoti('Đã thêm quote vào trả lời');
     const tmp = [...replyList];
     if (tmp.every(dt=>dt.id !== post.id)) {
-      tmp.push(post)
+      tmp.push(post);
       setReplyList(tmp);
+      handleOpenNoti();
     }
-    setPreText(getTextReply(replyList));
     console.log(replyList);
   }
 
@@ -81,14 +96,33 @@ export default function Thread(props) {
     });
     return out;
   }
+
+  function bookmark() {
+    dispatch(act.saveThread(where.thread, title))
+  }
+
+  function refresh() {
+
+  }
+
+  function bookmarkPost(id,text) {
+    dispatch({type: 'savePost',
+      payload:{
+        id: `${where.thread}/${where.page}#post${id}`,
+        text: html2text(text)
+      }});
+    setNoti('Đã đánh dấu bình luận');
+    handleOpenNoti();
+  }
+
   return (
     <>
-      <AppBar style={{boxShadow: 'none'}}>
+      <AppBar style={{boxShadow: 'none'}} onAdd={bookmark} onRefresh={refresh}>
         <Pagination page={where.page||1} maxPage={thread ? thread.last_page : where.page} onChangePage={onChangePage}/>
       </AppBar>
       <div>
         {thread ? (thread[where.page] ? thread[where.page].data.map((post)=>(
-          <PostCard data={post} number={post.number} key={post.id}  id={`post${post.id}`} copyLink={()=>copyLink(where.thread, post.id)} rep={login} onRep={()=>repPost(post)}/>
+          <PostCard data={post} number={post.number} key={post.id}  id={`post${post.id}`} bookmark={()=>bookmarkPost(post.id,post.data.comment)} copyLink={()=>copyLink(where.thread, post.id)} rep={login} onRep={()=>repPost(post)}/>
         )):''):''}
       </div>
       <div style={{border: 20}}>
@@ -99,17 +133,22 @@ export default function Thread(props) {
           message={<span id="message-id">{notify}</span>}
         />
       </div>
-      <Fab
-        style={{position: 'fixed',
-          bottom: 10,
-          right: 2,
-         }}
-        color={'primary'}
-        onClick={()=>setOpenReply(true)}
-      >
-        <CreateIcon/>
-      </Fab>
-      <Reply preText={preText} onSubmit={handleSubmitReply} onClose={()=>setOpenReply(false)} open={openReply}/>
+      {login ? <>
+        <Fab
+          style={{
+            position: 'fixed',
+            bottom: 10,
+            right: 2,
+          }}
+          color={'primary'}
+          onClick={() => setOpenReply(true)}
+        >
+          <CreateIcon/>
+        </Fab>
+        <Reply preText={preText} onSubmit={handleSubmitReply} onClose={()=>setOpenReply(false)} open={openReply}/>
+        </>
+        :''
+      }
     </>
   );
 }
