@@ -199,3 +199,4 @@ fabric.properties
 /build/*
 .idea/*
 .directory
+.vscode/
