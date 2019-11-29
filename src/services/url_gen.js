@@ -7,7 +7,9 @@ class LinkGen {
     const tmp = post ? `#post${post}` : '';
     return `/showthread.php?t=${id}${tmp}`;
   }
-
+  static linkPostsInThread(id, page="1") {
+    return `/showthread.php?t=${id}&page=${page}`;
+  }
   static linkInbox() {
     return `/private.php`;
   }

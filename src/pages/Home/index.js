@@ -57,7 +57,6 @@ export default function Home() {
             <ListItemText primary={<Typography variant={'h6'} className={classes.listText}>{props.text}</Typography>} />
         </ListItem>
       </Link>
-
     );
   }
   // function ListForum(cate){
