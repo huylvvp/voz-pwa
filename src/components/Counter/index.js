@@ -4,33 +4,38 @@ import { useSelector, useDispatch } from 'react-redux';
 import "./Counter.css";
 
 import parser from '../../services/parser';
-import customAxios from '../../services/requests';
+import customAxios from '../../services/custom_axios';
 import LinkGen from '../../services/url_gen';
 import auth from "services/auth";
-
+import requests from 'services/requests'
 
 function Index(props) {
-
+  const [data,setData] = React.useState('');
   console.log(props);
   function onForum() {
-    customAxios.get(LinkGen.linkForum(6))
-      .then(res=>{
-        console.log(parser.extractDataForum(res.data));
-      })
+    requests.getThreadsByF('17');
   }
   
   function onThread() {
-    console.log(parser.extractDataThread(threadData2));
+    customAxios.get(LinkGen.linkPostsInThread('7656643'), {
+      'withCredentials': true
+    }).then(response => {
+      console.log(response);
+      setData(response.data);
+      console.log(parser.extractDataThread(response.data));
+    })
+      .catch(console.error());
   }
 
   function onUserID() {
+    console.log(threadData);
     console.log(parser.getUserId(threadData));
   }
 
   function onInbox() {
     console.log(parser.extractDataInbox(inboxData));
   }
-
+  
   function onMessage() {
     console.log(parser.extractMessageContent(messageData));
   }
@@ -48,6 +53,12 @@ function Index(props) {
     let password = 'nghia123';
     auth.login(username, password);
   }
+  function onQuickReply() {
+    console.log(data);
+    let comment = "Học mỗi ngày mấy từ đã đành nhưng cũng cần áp dụng nó vào ngữ cảnh nữa thì mới lâu quên";
+    let threadId = "7656643";
+    requests.quickReply(threadId, comment,data);
+  }
   return (
     <div className="Counter">
       Test parser
@@ -60,6 +71,7 @@ function Index(props) {
         <button onClick={onSubscription}>Subscription</button>
         <button onClick={onSearch}>Search List</button>
         <button onClick={onLogin}>Test Login</button>
+        <button onClick={onQuickReply}>QuickReply</button>
       </div>
     </div>
   );

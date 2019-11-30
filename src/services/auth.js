@@ -1,5 +1,5 @@
 import cheerio from 'cheerio';
-import customAxios from './requests';
+import customAxios from './custom_axios';
 import {forumData} from '../components/Counter/tmp'
 import md5 from 'md5';
 function login(username, password) {
@@ -10,9 +10,18 @@ function login(username, password) {
   $("input[name*='vb_login_md5password_utf']").val(md5(password));
   let formData = getFormData($, 'form');
 
-  customAxios.post('/login.php?do=login',formData)
-  .then(response => {
-    console.log(response)
+  customAxios.post('/login.php?do=login',formData, {
+    "withCredentials" :true
+  }).then(response => {
+    if (response.status == 200 && response.data.includes("Thank you for logging in")) {
+      console.log("Login successfully");
+      console.log(response);
+      //Todo
+    }
+    else {
+      console.log("Login fail");
+      //Todo
+    }
   })
   .catch(error => {
     console.log(error);
