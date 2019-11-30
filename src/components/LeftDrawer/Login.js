@@ -2,7 +2,7 @@ import React from 'react';
 import { Avatar} from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import PersonIcon from '@material-ui/icons/Person';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Dialog from '@material-ui/core/Dialog';
@@ -11,18 +11,31 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
 import TextField from '@material-ui/core/TextField';
-
+import * as act from './../../actions/layout';
 export default function Login(props) {
   const {onClick} = props;
   const layout = useSelector(state => state.layout);
   const [open, setOpen] = React.useState(false);
-
+  const [input, setInput] = React.useState({
+    username: '',
+    password: ''
+  })
+  const dispatch  = useDispatch();
   function handleClick() {
     setOpen(true);
   }
 
-  function handleSubmit() {
+  function handleSubmit(e) {
+    e.preventDefault();
+    dispatch(act.doLogin(input.username,input.password));
     setOpen(false);
+  }
+  function handleChange(e) {
+    const value = e.target.value;
+    setInput({
+      ...input,
+      [e.target.name]: value
+    })
   }
   return (
     <>
@@ -47,7 +60,7 @@ export default function Login(props) {
                 {'T'}
               </Avatar>
               <div style={{display: 'flex',flexDirection: 'column', justifyContent: 'center'}}>
-                <Typography variant={'h5'}> Hello</Typography>
+                <Typography variant={'h5'}> Hello {layout.account.username}</Typography>
                 <Typography variant={'subtitle1'}> Hello</Typography>
               </div>
           </div>
@@ -68,7 +81,6 @@ export default function Login(props) {
               <Typography variant={'subtitle1'}> ʕ•́ᴥ•̀ʔっ♡</Typography>
             </div>
           </div>
-
         }
       </ButtonBase>
       <Dialog open={open} onClose={()=>setOpen(false)} >
@@ -77,7 +89,10 @@ export default function Login(props) {
           <TextField
             margin="dense"
             label="Username"
+            name="username"
             type="text"
+            value={input.username}
+            onChange={handleChange}
             fullWidth
           />
         </DialogContent>
@@ -85,7 +100,10 @@ export default function Login(props) {
           <TextField
             margin="dense"
             label="Password"
+            name="password"
             type="password"
+            value={input.password}
+            onChange={handleChange}
             fullWidth
           />
         </DialogContent>

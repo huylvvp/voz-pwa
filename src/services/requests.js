@@ -1,4 +1,4 @@
-import customAxios from "./custom_axios";
+import customAxios from "./axiosConfig";
 import LinkGen from "./url_gen";
 import parser from './parser';
 import cheerio from 'cheerio';

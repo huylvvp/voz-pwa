@@ -3,7 +3,7 @@ import {forum} from '../constants/forum'
 const initState = {
   title : 'Voz-PWA',
   location: '0-0',
-  login: true,
+  login: false,
   account: {},
   data: {
     forum: {},
@@ -199,6 +199,14 @@ const ui = (state = initState, action) => {
           post: tmp2
         }
       };
+    case 'doLogin':
+      return {
+        ...state,
+        login: action.payload.login,
+        account: {
+          username: action.payload.username 
+        }
+      }
     default:
       return state;
   }

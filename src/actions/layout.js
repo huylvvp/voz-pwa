@@ -1,6 +1,7 @@
-import customAxios from '../services/custom_axios'
+import customAxios from '../services/axiosConfig'
 import LinkGen from '../services/url_gen'
 import parser from '../services/parser'
+import auth from '../services/auth';
 export function getDataForum(forum,page) {
   let data = '';
   return dispatch => {
@@ -96,4 +97,30 @@ export function saveThread(id,text) {
       text: text,
     },
   };
+}
+
+export function doLogin(username, password) {
+  return (dispatch) => {
+    let formData = auth.getFormDataLogin(username, password);
+    customAxios.post('/login.php?do=login', formData, {
+      "withCredentials": true
+    }).then(response => {
+      if (response.status == 200 && response.data.includes("Thank you for logging in")) {
+        console.log("Login successfully");
+        dispatch({
+          type : 'doLogin',
+          payload: {
+            login: true,
+            username: username
+          }
+        })
+      }
+      else {
+        console.log("Login fail");
+      }
+    })
+      .catch(error => {
+        console.log(error);
+      });
+  }
 }
