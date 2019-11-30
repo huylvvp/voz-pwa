@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import "./Counter.css";
 
 import parser from '../../services/parser';
-import customAxios from '../../services/custom_axios';
+import customAxios from '../../services/axiosConfig';
 import LinkGen from '../../services/url_gen';
 import auth from "services/auth";
 import requests from 'services/requests'
