@@ -13,7 +13,7 @@ function Index(props) {
   const [data,setData] = React.useState('');
   console.log(props);
   function onForum() {
-    requests.getThreadsByF('17');
+    requests.getThreadsByF('145');
   }
   
   function onThread() {

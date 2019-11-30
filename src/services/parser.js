@@ -134,9 +134,16 @@ function extractDataForum(data) {
   let $ = cheerio.load(data);
   let threads = $(`#threadslist > tbody[id] > tr`).get()
     .map(tr=>{
+      let thread = {};
       let td = $(tr).children(':nth-child(2)');
-      const thread = getTitle($, td);
-      td = $(tr).children(':nth-child(3)');
+      if (td.attr("id")) {
+        thread = getTitle($,td);
+        td = $(tr).children(':nth-child(3)');
+      } else {
+        td = $(tr).children(':nth-child(3)');
+        thread = getTitle($, td);
+        td = $(tr).children(':nth-child(4)');
+      }
       const tmp = getBasicDetails($,td);
       return {
         ...thread,
