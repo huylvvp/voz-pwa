@@ -6,7 +6,7 @@ import Pagination from '../../components/Pagination';
 import AppBar from '../../components/AppBar';
 
 export default function MessDetail(props) {
-  let id = props.match.params.id;
+  let id = props.match.params.detail;
   const dispatch = useDispatch();
   const mess = useSelector(state=>state.layout.data.message[id]);
 

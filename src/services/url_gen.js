@@ -11,9 +11,11 @@ class LinkGen {
     return `/showthread.php?t=${id}&page=${page}`;
   }
   static linkInbox() {
-    return `/private.php`;
+    return '/private.php';
   }
-
+  static linkOutbox() {
+    return '/private.php?folderid=-1';
+  }
   static linkShowMessage(id){
     return `/private.php?do=showpm&pmid=${id}`;
   }
@@ -27,7 +29,7 @@ class LinkGen {
   }
 
   static linkLogin() {
-    return `/login.php?do=login`;
+    return '/login.php?do=login';
   }
 
 }

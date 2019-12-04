@@ -14,5 +14,7 @@ function getFormDataLogin(username, password) {
   })
   return bodyFormData;
 }
-
+function checkLogin() {
+  
+}
 export default {getFormDataLogin}

@@ -26,7 +26,7 @@ export function getDataForum(forum,page) {
 
 export function getDataSub(page) {
   return dispatch => {
-    customAxios.get("subscription.php", {
+    customAxios.get(LinkGen.linkShowSubscription, {
       'withCredentials' : true
     }).then(response => {
       let tmp = parser.extractSubscription(response.data);
@@ -66,7 +66,7 @@ export function getDataMess(page=1) {
   return async (dispatch)=>{
 
     let data = {};
-  
+    
     Axios.all([
       customAxios.get("/private.php", {
         "withCredentials" : true
@@ -93,7 +93,9 @@ export function getDataMess(page=1) {
 export function getMessDetail(id) {
   return async (dispatch)=>{
     try {
-      const res = await customAxios.get(`/private.php?do=showpm&pmid=${id}`);
+      const res = await customAxios.get(LinkGen.linkShowMessage(id), 
+      {"withCredentials" :true});
+      console.log(res);
       const data = parser.extractMessageContent(res.data);
       dispatch({
         type: 'pushMessageDetail', payload: {
@@ -124,7 +126,7 @@ export function saveThread(id,text) {
 export function doLogin(username, password) {
   return (dispatch) => {
     let formData = auth.getFormDataLogin(username, password);
-    customAxios.post('/login.php?do=login', formData, {
+    customAxios.post("/login.php?do=login", formData, {
       "withCredentials": true
     }).then(response => {
       if (response.status == 200 && response.data.includes("Thank you for logging in")) {
@@ -144,5 +146,5 @@ export function doLogin(username, password) {
       .catch(error => {
         console.log(error);
       });
-  }
+  } 
 }

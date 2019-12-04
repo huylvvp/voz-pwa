@@ -89,7 +89,7 @@ function getBasicDetails($, td) {
 function extractPostFromDiv($, post){
   let p = {};
   let tmp;
-
+  
   p.number = $(post).find('.thead > .normal > a').text();
   p.time = $(post).find('.thead > div:nth-child(2).normal ').text().trim();
   p.user = {
