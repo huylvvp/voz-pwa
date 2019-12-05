@@ -47,7 +47,7 @@ function getQuoteAndContentFromDiv($, tmp){
   const quotes = tmp.find('div[style]:has(div.smallfont)').get().map(quote=>{
     return getQuoteFromDivQuote($, quote);
   });
-  tmp.find('>div[style]:has(div.smallfont)').remove();
+  tmp.find('div[style]:has(div.smallfont[style])').remove();
   return {
     quotes: quotes,
     content: format(tmp)
@@ -179,6 +179,10 @@ function extractDataThread(data) {
   let tmp;
   let output = getPageNumber($);
   output.data = [];
+  output.subscribed = false;
+  tmp = $('#threadtools_menu > form > table > tbody > tr:nth-child(4) > td').html();
+  if (tmp.includes('Unsubscribe'))
+    output.subscribed = true;
   $('#posts > div[id]').get()
     .forEach(wpost=>{
       // wpost is template postbit_wraper

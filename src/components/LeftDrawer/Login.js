@@ -60,7 +60,7 @@ export default function Login(props) {
                 {layout.account.avatar.length > 0 ? '' : layout.account.username.chartAt(0).toUpperCase()}
               </Avatar>
               <div style={{display: 'flex',flexDirection: 'column', justifyContent: 'center'}}>
-                <Typography variant={'h5'}> Hello {layout.account.username}</Typography>
+                <Typography variant={'h5'}>{layout.account.username}</Typography>
                 <Typography variant={'subtitle1'}>{layout.account.level}</Typography>
               </div>
           </div>

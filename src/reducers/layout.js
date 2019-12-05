@@ -34,6 +34,9 @@ const initState = {
         text: 'Thuyvan dạo này ăn chơi trác táng nơi đâu? Mà để gió đệ lộng hành thế nhỉ '
       }
     ]
+  },
+  search: {
+    data: []
   }
 };
 
@@ -87,7 +90,8 @@ const ui = (state = initState, action) => {
             ...state.data.thread,
             [action.payload.thread] : {
               last_page: action.payload.last_page,
-              [action.payload.page]: action.payload.data
+              [action.payload.page]: action.payload.data,
+              subscribed: action.payload.subscribed
             }
           }
         }
@@ -208,7 +212,12 @@ const ui = (state = initState, action) => {
           level: action.payload.level,
           avatar: action.payload.avatar
         }
-      }
+      };
+    case 'search':
+      return {
+        ...state,
+        search: action.payload
+      };
     default:
       return state;
   }

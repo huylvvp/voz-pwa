@@ -32,7 +32,6 @@ export default function Thread(props) {
     setTran(()=> TransitionUp);
     dispatch(act.getDataThread(where.thread,where.page));
     if (props.location.hash){
-      console.log(props);
       let tmp;
       let t = setInterval(()=>{
         tmp = document.getElementById(props.location.hash.split('#')[1]);
@@ -116,11 +115,28 @@ export default function Thread(props) {
     handleOpenNoti();
   }
 
+  function subscribeThread(){
+    dispatch(act.subscribeThread(where.thread));
+  }
+  function unSub(){
+    dispatch(act.unSubscribeThread(where.thread));
+  }
+
   return (
     <>
-      <AppBar style={{boxShadow: 'none'}} onAdd={bookmark} onRefresh={refresh}>
-        <Pagination page={where.page||1} maxPage={thread ? thread.last_page : where.page} onChangePage={onChangePage}/>
+      {!thread ?
+        <AppBar style={{ boxShadow: 'none' }} onAdd={bookmark} onRefresh={refresh}>
+          <Pagination page={where.page || 1} maxPage={thread ? thread.last_page : where.page} onChangePage={onChangePage}/>
+        </AppBar>
+        : (thread.subscribed ?
+      <AppBar style={{ boxShadow: 'none' }} onAdd={bookmark} onRefresh={refresh} unSub={login ? unSub : undefined}>
+        <Pagination page={where.page || 1} maxPage={thread ? thread.last_page : where.page} onChangePage={onChangePage}/>
       </AppBar>
+      :
+      <AppBar style={{boxShadow: 'none'}} onAdd={bookmark} onRefresh={refresh} subThread={login?subscribeThread:undefined}>
+        <Pagination page={where.page||1} maxPage={thread ? thread.last_page : where.page} onChangePage={onChangePage}/>
+      </AppBar>)
+        }
       <div>
         {thread ? (thread[where.page] ? thread[where.page].data.map((post)=>(
           post.deleted ? <Deleted data={post} key={post.time+post.username}/> : <PostCard data={post} number={post.number} key={post.id}  id={`post${post.id}`} bookmark={()=>bookmarkPost(post.id,post.data.comment)} copyLink={()=>copyLink(where.thread, post.id)} rep={login} onRep={()=>repPost(post)}/>

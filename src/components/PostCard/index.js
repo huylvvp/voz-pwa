@@ -173,7 +173,7 @@ export default function PostCard(props) {
         <div>
           {data.signature.comment? <div dangerouslySetInnerHTML={{ __html: data.signature.comment}} style={{paddingBottom: 5}}/>:''}
           {data.signature.quotes ? data.signature.quotes.map(quote=>(
-            <Quote data={quote} key={quote.url}/>
+            <Quote data={quote} key={data.id +data.time+ quote.url+quote.by}/>
           )):''}
         </div>
       </CardContent>

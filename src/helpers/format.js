@@ -17,11 +17,12 @@ function getYoutubeIdFromLink(url) {
 
 // data is node
 function formatYoutubeLink(data){
-  data.find('a').replaceWith(function() {
-    let tmp = getYoutubeIdFromLink(this.attribs['href']);
-    if (!tmp)
-      return this;
-    return `<iframe class="neo_player inner youtube" type="text/html" src="https://www.youtube.com/embed/${tmp}" frameborder="0" allowfullscreen=""></iframe>`;
+  data.find('a').filter(function() {
+    return (this.attribs['href'].includes('youtube') || this.attribs['href'].includes('youtu.be'));
+  }).replaceWith(function() {
+      let tmp = getYoutubeIdFromLink(this.attribs['href']);
+      if (tmp)
+        return `<iframe class="neo_player inner youtube" type="text/html" src="https://www.youtube.com/embed/${tmp}" frameborder="0" allowfullscreen=""></iframe>`;
   });
   return data.html();
 }

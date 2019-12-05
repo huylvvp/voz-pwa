@@ -49,4 +49,19 @@ function getFormDataQuickReply($, form) {
   return bodyFormData;
 }
 
-export default { getThreadsByF, getThreadData, quickReply };
+function getFormSubscribe(threadId,subPage){
+  let $ = cheerio.load(subPage);
+  let bodyFormData = new FormData();
+  $("td[width] > form").find('input').each((index, inp) => {
+    let $inp = $(inp);
+    if (inp.attribs.name !== 'url' && inp.attribs.type!== 'submit'){
+      bodyFormData.append($inp.attr('name'), $inp.val() || '');
+    }
+  });
+  bodyFormData.append('url', 'index.php');
+  bodyFormData.append('emailupdate', '0');
+  bodyFormData.append('folderid', '0');
+  return bodyFormData;
+}
+
+export default { getThreadsByF, getThreadData, quickReply,getFormSubscribe };

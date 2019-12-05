@@ -5,6 +5,7 @@ import Thread from './pages/Thread';
 import Subscription from './pages/Subscription';
 import Message from './pages/Message/index';
 import MessDetail from './pages/Message/MessDetail';
+import Search from './pages/Search';
 
 const routes = [
   { path: '/home', exact: true, name: 'Home', component: Home },
@@ -18,6 +19,8 @@ const routes = [
   { path: '/sub', exact: true, name: 'Subscription', component: Subscription },
   { path: '/message', exact: true, name: 'Message', component: Message },
   { path: '/message/:detail', exact: true, name: 'Detail', component: MessDetail },
+  { path: '/search/:keyword', exact: true, name: 'Search', component: Search },
+  { path: '/search/:keyword/:page', exact: true, name: 'Search', component: Search },
 ];
 
 export default routes;
