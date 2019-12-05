@@ -92,7 +92,13 @@ function getBasicDetails($, td) {
 function extractPostFromDiv($, post){
   let p = {};
   let tmp;
-  
+  if (!$(post).find('.bigusername').attr('href')){
+    p.deleted = true;
+    p.time = $(post).find('tr[title]').text().trim();
+    p.username = $(post).find('tr > td > a').text();
+    p.data = 'Deleted by admin';
+    return p;
+  }
   p.number = $(post).find('.thead > .normal > a').text();
   p.time = $(post).find('.thead > div:nth-child(2).normal ').text().trim();
   p.user = {

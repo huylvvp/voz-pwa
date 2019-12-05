@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import PostCard from '../../components/PostCard';
+import Deleted from '../../components/PostCard/Deleted';
 import { useDispatch, useSelector } from 'react-redux';
 import * as act from '../../actions/layout';
 import Pagination from '../../components/Pagination';
@@ -122,7 +123,7 @@ export default function Thread(props) {
       </AppBar>
       <div>
         {thread ? (thread[where.page] ? thread[where.page].data.map((post)=>(
-          <PostCard data={post} number={post.number} key={post.id}  id={`post${post.id}`} bookmark={()=>bookmarkPost(post.id,post.data.comment)} copyLink={()=>copyLink(where.thread, post.id)} rep={login} onRep={()=>repPost(post)}/>
+          post.deleted ? <Deleted data={post}/> : <PostCard data={post} number={post.number} key={post.id}  id={`post${post.id}`} bookmark={()=>bookmarkPost(post.id,post.data.comment)} copyLink={()=>copyLink(where.thread, post.id)} rep={login} onRep={()=>repPost(post)}/>
         )):''):''}
       </div>
       <div style={{border: 20}}>
