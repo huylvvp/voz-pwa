@@ -263,6 +263,23 @@ function extractSearchContent(data){
     data: out
   };
 }
+
+function getMemberInfo(data) {
+  let $ = cheerio.load(data);
+  let out = {};
+  $('#main_userinfo > table > tbody > tr')
+  .get().forEach(row => {
+    let td = $(row).find('#profilepic_cell > img');
+    out.avaSrc = (td) ? td.attr('src') : ''; 
+    td = $(row).find('#username_box');
+    out.username = td.find('h1').text();
+    let img = td.find('h1 > img');
+    out.isOnline = img.attr('alt').includes('online') ? true : false;
+    out.level = td.find('h2').text();
+  });
+  return out;
+}
 export default {
-  extractDataForum,extractDataThread, getUserId, extractDataInbox, extractMessageContent, extractSubscription,extractSearchContent
+  extractDataForum,extractDataThread, getUserId, extractDataInbox, extractMessageContent, extractSubscription,extractSearchContent,
+  getMemberInfo
 };

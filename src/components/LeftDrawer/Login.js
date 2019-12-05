@@ -13,7 +13,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import TextField from '@material-ui/core/TextField';
 import * as act from './../../actions/layout';
 export default function Login(props) {
-  const {onClick} = props;
   const layout = useSelector(state => state.layout);
   const [open, setOpen] = React.useState(false);
   const [input, setInput] = React.useState({
@@ -56,12 +55,13 @@ export default function Login(props) {
                   backgroundColor: '#7986cb',
                   zoom: 1.3
                 }}
+                src={"https://forums.voz.vn/" + layout.account.avatar}
               >
-                {'T'}
+                {layout.account.avatar.length > 0 ? '' : layout.account.username.chartAt(0).toUpperCase()}
               </Avatar>
               <div style={{display: 'flex',flexDirection: 'column', justifyContent: 'center'}}>
                 <Typography variant={'h5'}> Hello {layout.account.username}</Typography>
-                <Typography variant={'subtitle1'}> Hello</Typography>
+                <Typography variant={'subtitle1'}>{layout.account.level}</Typography>
               </div>
           </div>
           :

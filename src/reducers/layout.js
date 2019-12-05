@@ -204,7 +204,9 @@ const ui = (state = initState, action) => {
         ...state,
         login: action.payload.login,
         account: {
-          username: action.payload.username 
+          username: action.payload.username,
+          level: action.payload.level,
+          avatar: action.payload.avatar
         }
       }
     default:

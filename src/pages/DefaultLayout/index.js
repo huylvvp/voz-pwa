@@ -35,7 +35,7 @@ export default function SwipeableTemporaryDrawer() {
 
     dispatch(actUi.toggleDrawer(side,open));
   };
-
+  
   return (
     <>
       <div style={ui.loading ? { display: 'none' } : {display: 'block'}}>
