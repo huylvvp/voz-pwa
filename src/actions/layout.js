@@ -2,14 +2,14 @@ import customAxios from '../services/axiosConfig'
 import LinkGen from '../services/url_gen'
 import parser from '../services/parser'
 import auth from '../services/auth';
-import { parse } from 'path';
 import Axios from 'axios';
+const config = {
+  "withCredentials" : true
+}
 export function getDataForum(forum,page) {
   let data = '';
   return dispatch => {
-    customAxios.get(LinkGen.linkForum(forum, page), {
-      'withCredentials': true
-    }).then(response => {
+    customAxios.get(LinkGen.linkForum(forum, page),config).then(response => {
       data = parser.extractDataForum(response.data);
       dispatch({
         type: 'pushForum', payload: {
@@ -26,9 +26,7 @@ export function getDataForum(forum,page) {
 
 export function getDataSub(page) {
   return dispatch => {
-    customAxios.get(LinkGen.linkShowSubscription, {
-      'withCredentials' : true
-    }).then(response => {
+    customAxios.get(`/subscription.php`, config).then(response => {
       let tmp = parser.extractSubscription(response.data);
       dispatch({
         type: 'pushSubscription', payload: {
@@ -44,12 +42,10 @@ export function getDataSub(page) {
 
 export function getDataThread(thread,page) {
   return dispatch => {
-    customAxios.get(LinkGen.linkPostsInThread(thread, page), {
-      'withCredentials': true
-    }).then(response => {
+    customAxios.get(LinkGen.linkPostsInThread(thread, page), config).then(response => {
       console.log(response);
       let tmp = parser.extractDataThread(response.data);
-      dispatch({
+      dispatch({  
         type: 'pushThread', payload: {
           thread: thread,
           page: page,
@@ -68,12 +64,8 @@ export function getDataMess(page=1) {
     let data = {};
     
     Axios.all([
-      customAxios.get("/private.php", {
-        "withCredentials" : true
-      }),
-      customAxios.get("private.php?folderid=-1", {
-        "withCredentials":true
-      })
+      customAxios.get("/private.php", config),
+      customAxios.get("private.php?folderid=-1",config)
     ]).then(responseArr => {
       data['inbox'] = parser.extractDataInbox(responseArr[0].data);
       data['outbox'] = parser.extractDataInbox(responseArr[1].data);
@@ -93,8 +85,7 @@ export function getDataMess(page=1) {
 export function getMessDetail(id) {
   return async (dispatch)=>{
     try {
-      const res = await customAxios.get(LinkGen.linkShowMessage(id), 
-      {"withCredentials" :true});
+      const res = await customAxios.get(LinkGen.linkShowMessage(id), config);
       console.log(res);
       const data = parser.extractMessageContent(res.data);
       dispatch({
@@ -124,27 +115,28 @@ export function saveThread(id,text) {
 }
 
 export function doLogin(username, password) {
-  return (dispatch) => {
+  return async (dispatch) => {
     let formData = auth.getFormDataLogin(username, password);
-    customAxios.post("/login.php?do=login", formData, {
-      "withCredentials": true
-    }).then(response => {
-      if (response.status == 200 && response.data.includes("Thank you for logging in")) {
-        console.log("Login successfully");
+    try {
+      let res = await customAxios.post("/login.php?do=login", formData, config);
+      if (res.status == 200  && res.data.includes("Thank you for logging in")) {
+        res = await customAxios.get('/index.php',config);
+        const id = parser.getUserId(res.data);
+        res = await customAxios(`/member.php?u=${id}`, config);
+        let info = parser.getMemberInfo(res.data);
         dispatch({
           type : 'doLogin',
           payload: {
             login: true,
-            username: username
+            username: info.username,
+            avatar: info.avaSrc,
+            isOnline: info.isOnline,
+            level: info.level
           }
         })
       }
-      else {
-        console.log("Login fail");
-      }
-    })
-      .catch(error => {
-        console.log(error);
-      });
-  } 
+    } catch (error) {
+      console.log(error)
+    }
+  }
 }

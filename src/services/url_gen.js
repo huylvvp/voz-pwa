@@ -31,7 +31,9 @@ class LinkGen {
   static linkLogin() {
     return '/login.php?do=login';
   }
-
+  static linkMember(id) {
+    return `/member.php?u=${id}`;
+  }
 }
 
 export default LinkGen;
