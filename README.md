@@ -66,3 +66,19 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `yarn build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+### Test firebase:
+https://fcm.googleapis.com/fcm/send <br/>
+Header: <br/>
+Content-Type: application/json <br/>
+Authorization: key=AAAAeMSDWl4:APA91bEYoCP4o4KHWtZndXwcUS81C8oSdk7vgd1R5MYvCsyIw5dnnO1TL--Ezi9I2tMykMGJ07ZkdeA--xanF26Zc3E7HsgvmOdJGYPuO61d3DzRhrpiIvS87970r0YQjDenhEiM526l
+```json
+{
+    "notification": {
+        "title": "Firebase",
+        "body": "Firebase is awesome",
+        "click_action": "http://localhost:3000/",
+        "icon": "http://url-to-an-icon/icon.png"
+    },
+    "to": "user token "
+}

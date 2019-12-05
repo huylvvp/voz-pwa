@@ -14,6 +14,7 @@ export default function Forum(props) {
   let where ={page: 1};
   where = {...where, ... props.match.params };
   const dispatch = useDispatch();
+  const login = useSelector(state => state.layout.login);
   const forum = useSelector(state=>state.layout.data.forum[where.forum]);
   const [openCreate, setOpen] = React.useState(false);
 
@@ -55,16 +56,19 @@ export default function Forum(props) {
           <ThreadCard detail={data} key={data.id} onClick={()=>props.history.push(`/thread/${data.id}`)}/>
         ) : '' ): ''}
       </div>
+      {login &&
       <Fab
-        style={{position: 'fixed',
+        style={{
+          position: 'fixed',
           bottom: 10,
           right: 2,
         }}
         color={'primary'}
-        onClick={()=>setOpen(true)}
+        onClick={() => setOpen(true)}
       >
         <CreateIcon/>
       </Fab>
+      }
       <Create title={'Create thread'} f1={'Title'} f2={'Content'} open={openCreate} onClose={()=>setOpen(false)&&console.log('hello')} onSubmit={handleSubmit}/>
     </>
   )

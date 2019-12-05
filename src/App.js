@@ -3,6 +3,7 @@ import { Route, Router, Switch } from 'react-router-dom';
 import history from './helpers/history';
 import './App.scss';
 import Pepe from './scss/Pepe.png';
+import { askForPermissioToReceiveNotifications } from './pushNotification';
 
 const loading = () => (
   <div className="animated fadeIn pt-3 text-center">
@@ -12,6 +13,8 @@ const loading = () => (
 const DefaultLayout = React.lazy(() => import('pages/DefaultLayout'));
 
 function App() {
+  if (!localStorage.getItem('notify_token'))
+    askForPermissioToReceiveNotifications();
   return (
     <Router history={history}>
       <React.Suspense fallback={loading()}>

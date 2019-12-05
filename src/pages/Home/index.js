@@ -64,9 +64,12 @@ export default function Home() {
   //
   //   )
   // }
+  function onRefresh() {
+
+  }
   return (
     <>
-      <AppBar style={{boxShadow: 'none'}}/>
+      <AppBar style={{boxShadow: 'none'}} onRefresh={onRefresh} onAdd={()=>''}/>
 
       <div className={classes.root}>
         <div className={classes.divider}></div>

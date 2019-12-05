@@ -9,6 +9,7 @@
     "cheerio": "^1.0.0-rc.3",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-prettier": "^6.5.0",
+    "firebase": "^7.5.0",
     "history": "^4.10.1",
     "html2bbcode": "^1.2.6",
     "md5": "^2.2.1",

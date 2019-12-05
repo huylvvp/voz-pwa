@@ -115,7 +115,7 @@ export default function Appbar(props) {
             inputRef={searchRef}
           />
           <IconButton color="inherit"
-                      onClick={()=> onClickSearch()}
+                      onClick={() => onClickSearch()}
           >
             <SearchIcon/>
           </IconButton>

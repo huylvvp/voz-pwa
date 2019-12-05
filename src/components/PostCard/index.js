@@ -99,7 +99,7 @@ const Quote = (props) =>{
           }
         </div>
       ):''}
-      <div dangerouslySetInnerHTML={{ __html: data.content }} />
+      <div className={'box-content'} dangerouslySetInnerHTML={{ __html: data.content }} />
     </div>
   )
 };
@@ -167,9 +167,9 @@ export default function PostCard(props) {
       </CardActionArea>
       <CardContent style={{paddingTop: 2}}>
         {data.data.quotes ? data.data.quotes.map(quote=>(
-          <Quote data={quote} key={data.time + quote.url} disableQuoteLink={disableQuoteLink}/>
+          <Quote data={quote} key={data.id + data.time + quote.url} disableQuoteLink={disableQuoteLink}/>
         )):''}
-        {data.data.comment ? <div dangerouslySetInnerHTML={{ __html: data.data.comment}} style={{paddingTop: 5}}/>:''}
+        {data.data.comment ? <div className={'box-content'} dangerouslySetInnerHTML={{ __html: data.data.comment}} style={{paddingTop: 5}}/>:''}
         <div>
           {data.signature.comment? <div dangerouslySetInnerHTML={{ __html: data.signature.comment}} style={{paddingBottom: 5}}/>:''}
           {data.signature.quotes ? data.signature.quotes.map(quote=>(

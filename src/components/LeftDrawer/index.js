@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Divider, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import HomeIcon from '@material-ui/icons/Home';
@@ -18,10 +18,12 @@ import TextField from '@material-ui/core/TextField';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
+import PaymentIcon from '@material-ui/icons/Payment';
 
 export default function LeftDrawer() {
   const dispatch = useDispatch();
   const [val,setVal] = React.useState(17);
+  const login = useSelector(state => state.layout.login);
   const [openDialog, setOpen] = React.useState(false);
 
   function homeClick(){
@@ -46,6 +48,69 @@ export default function LeftDrawer() {
 
   function handleClose(){
     setOpen(false);
+  }
+  
+  function purchase() {
+    if (!window.PaymentRequest) {
+      // PaymentRequest API is not available.
+      console.log('Payment not supported');
+      return;
+    }
+
+    // Supported payment methods
+     let supportedInstruments = [{
+      supportedMethods: ['basic-card'],
+      data: {
+        supportedNetworks: [
+          'visa', 'mastercard', 'amex', 'discover',
+          'diners', 'jcb', 'unionpay'
+        ]
+      }
+    }];
+
+    // Checkout details
+    let details = {
+      displayItems: [{
+        label: 'Donate & Remove ads from app',
+        amount: { currency: 'USD', value: '3.00' }
+      }, {
+        label: 'Voz memver discount',
+        amount: { currency: 'USD', value: '-1.00' }
+      }],
+      total: {
+        label: 'Total',
+        amount: { currency: 'USD', value : '2.00' }
+      }
+    };
+
+    // 1. Create a `PaymentRequest` instance
+    let request = new PaymentRequest(supportedInstruments, details);
+
+    // 2. Show the native UI with `.show()`
+    request.show()
+    // 3. Process the payment
+      .then(result => {
+        // POST the payment information to the server
+        return fetch('/pay', {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(result.toJSON())
+        }).then(response => {
+          // 4. Display payment results
+          if (response.status === 200) {
+            // Payment successful
+            return result.complete('success');
+          } else {
+            // Payment failure
+            return result.complete('fail');
+          }
+        }).catch(() => {
+          return result.complete('fail');
+        });
+      });
   }
   return (
     <div
@@ -77,20 +142,30 @@ export default function LeftDrawer() {
           <ListItemText primary={'Trang chủ'}/>
         </ListItem>
         <Divider/>
-        <ListItem button onClick={subClick}>
-          <ListItemIcon><SubscriptionsIcon/></ListItemIcon>
-          <ListItemText primary={'Đang theo dõi'}/>
-        </ListItem>
-        <Divider/>
-        <ListItem button onClick={messageClick}>
-          <ListItemIcon><ModeCommentIcon/></ListItemIcon>
-          <ListItemText primary={'Tin nhắn'}/>
-        </ListItem>
-        <Divider/>
+        {login &&
+        <>
+          <ListItem button onClick={subClick}>
+            <ListItemIcon><SubscriptionsIcon/></ListItemIcon>
+            <ListItemText primary={'Đang theo dõi'}/>
+          </ListItem>
+          <Divider/>
+          <ListItem button onClick={messageClick}>
+            <ListItemIcon><ModeCommentIcon/></ListItemIcon>
+            <ListItemText primary={'Tin nhắn'}/>
+          </ListItem>
+          <Divider/>
+        </>
+        }
         <ListItem button onClick={()=>setOpen(true)}>
           <ListItemIcon><CallMissedOutgoingIcon/></ListItemIcon>
           <ListItemText primary={'Chuyển tới'}/>
         </ListItem>
+        {!localStorage.getItem('purchased') &&
+        <ListItem button onClick={purchase}>
+          <ListItemIcon><PaymentIcon/></ListItemIcon>
+          <ListItemText primary={'Donate'}/>
+        </ListItem>
+        }
         <Divider/>
       </List>
       <Dialog open={openDialog} onClose={handleClose} aria-labelledby="jump-choose">

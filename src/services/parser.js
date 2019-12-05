@@ -33,9 +33,12 @@ function getQuoteFromDivQuote($, quote) {
   let out = {};
   out.by = $(quote).find('tr > td.alt2 > div:first-child > strong').text();
   out.url = $(quote).find('tr > td > div:first-child > a').attr('href');
-  if ($(quote).find('tr > td.alt2 > div:last-child').length)
-    out.content = format($(quote).find('tr > td.alt2 > div:last-child'));
-  else out.content = format($(quote).find('tr > td.alt2'));
+  if ($(quote).find('tr > td.alt2').length) {
+    if ($(quote).find('tr > td.alt2 > div:last-child').length)
+      out.content = format($(quote).find('tr > td.alt2 > div:last-child'));
+    else out.content = format($(quote).find('tr > td.alt2'));
+  }
+  else out.content = format($(quote));
   return out;
 }
 
@@ -44,7 +47,7 @@ function getQuoteAndContentFromDiv($, tmp){
   const quotes = tmp.find('div[style]:has(div.smallfont)').get().map(quote=>{
     return getQuoteFromDivQuote($, quote);
   });
-  tmp.find('div[style]:has(div.smallfont)').remove();
+  tmp.find('>div[style]:has(div.smallfont)').remove();
   return {
     quotes: quotes,
     content: format(tmp)
