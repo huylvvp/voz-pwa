@@ -57,6 +57,8 @@ function getQuoteAndContentFromDiv($, tmp){
 //template showthread threadbit td:threadtitle
 function getTitle($,td) {
   let thread={};
+  if (!td.attr('id'))
+    return false;
   thread.intro = td.attr('title');
   thread.id = td.attr('id').split('_')[2];
   thread.title = $(td).find(`div:nth-child(1) #thread_title_${thread.id}`).text();
@@ -141,8 +143,9 @@ function extractPostFromDiv($, post){
 // template forumdisplay
 function extractDataForum(data) {
   let $ = cheerio.load(data);
-  let threads = $(`#threadslist > tbody[id] > tr`).get()
-    .map(tr=>{
+  let threads =[];
+  $(`#threadslist > tbody[id] > tr`).get()
+    .forEach(tr=>{
       let thread = {};
       let td = $(tr).children(':nth-child(2)');
       if (td.attr("id")) {
@@ -153,11 +156,13 @@ function extractDataForum(data) {
         thread = getTitle($, td);
         td = $(tr).children(':nth-child(4)');
       }
+      if (!thread)
+        return;
       const tmp = getBasicDetails($,td);
-      return {
+      threads.push({
         ...thread,
         ...tmp
-      };
+      });
     });
 
   return {

@@ -123,7 +123,7 @@ export default function Thread(props) {
       </AppBar>
       <div>
         {thread ? (thread[where.page] ? thread[where.page].data.map((post)=>(
-          post.deleted ? <Deleted data={post}/> : <PostCard data={post} number={post.number} key={post.id}  id={`post${post.id}`} bookmark={()=>bookmarkPost(post.id,post.data.comment)} copyLink={()=>copyLink(where.thread, post.id)} rep={login} onRep={()=>repPost(post)}/>
+          post.deleted ? <Deleted data={post} key={post.time+post.username}/> : <PostCard data={post} number={post.number} key={post.id}  id={`post${post.id}`} bookmark={()=>bookmarkPost(post.id,post.data.comment)} copyLink={()=>copyLink(where.thread, post.id)} rep={login} onRep={()=>repPost(post)}/>
         )):''):''}
       </div>
       <div style={{border: 20}}>

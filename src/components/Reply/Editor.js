@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function TextEditor(props) {
   const classes = useStyles();
-  const {initValue, onChange}= props;
+  const {initValue, onChange, label}= props;
   const [text,setText] = React.useState(initValue);
   const [image, setImage] = React.useState(undefined);
   const [uploading, setUploading] = React.useState(false);
@@ -94,7 +94,7 @@ export default function TextEditor(props) {
   return (
     <>
       <TextField
-        label="Reply"
+        label={label || "Reply"}
         multiline
         fullWidth
         rows="10"
@@ -135,7 +135,7 @@ export default function TextEditor(props) {
         <IconButton className={classes.toolIcon} onClick={insertLink}>
           <LinkIcon/>
         </IconButton>
-        <IconButton className={classes.toolIcon} onClick={imageLink}>
+        <IconButton className={classes.toolIcon} onClick={()=>imageLink()}>
           <AddPhotoAlternateIcon/>
         </IconButton>
       </Toolbar>

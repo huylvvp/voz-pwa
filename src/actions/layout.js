@@ -9,6 +9,7 @@ const config = {
 export function getDataForum(forum,page) {
   let data = '';
   return dispatch => {
+    dispatch({type: 'setLoading', payload: true});
     customAxios.get(LinkGen.linkForum(forum, page),config).then(response => {
       data = parser.extractDataForum(response.data);
       dispatch({
@@ -20,12 +21,14 @@ export function getDataForum(forum,page) {
         }
       });
     })
-    .catch(console.error());
+    .catch(err=> console.error(err))
+    .finally(()=> dispatch({type: 'setLoading', payload: false}));
   }
 }
 
 export function getDataSub(page) {
   return dispatch => {
+    dispatch({type: 'setLoading', payload: true});
     customAxios.get(`/subscription.php`, config).then(response => {
       let tmp = parser.extractSubscription(response.data);
       dispatch({
@@ -37,13 +40,15 @@ export function getDataSub(page) {
       });
       dispatch({ type: 'setTitle', payload: 'Subscriptions' });
     })
+      .catch(err=> console.error(err))
+      .finally(()=> dispatch({type: 'setLoading', payload: false}))
     }
 }
 
 export function getDataThread(thread,page) {
   return dispatch => {
+    dispatch({type: 'setLoading', payload: true});
     customAxios.get(LinkGen.linkPostsInThread(thread, page), config).then(response => {
-      console.log(response);
       let tmp = parser.extractDataThread(response.data);
       dispatch({  
         type: 'pushThread', payload: {
@@ -54,7 +59,9 @@ export function getDataThread(thread,page) {
         }
       });
       dispatch({ type: 'setTitle', payload: tmp.subject });
-    }).catch(console.error());
+    })
+      .catch(err=> console.error(err))
+      .finally(()=> dispatch({type: 'setLoading', payload: false}))
   }
 }
 
@@ -62,7 +69,7 @@ export function getDataMess(page=1) {
   return async (dispatch)=>{
 
     let data = {};
-    
+    dispatch({type: 'setLoading', payload: true});
     Axios.all([
       customAxios.get("/private.php", config),
       customAxios.get("private.php?folderid=-1",config)
@@ -78,15 +85,16 @@ export function getDataMess(page=1) {
       });
       dispatch({ type: 'setTitle', payload: 'Messages' });
     })
-    .catch(console.error);
+      .catch(err=> console.error(err))
+      .finally(()=> dispatch({type: 'setLoading', payload: false}))
   }
 }
 
 export function getMessDetail(id) {
   return async (dispatch)=>{
+    dispatch({type: 'setLoading', payload: true});
     try {
       const res = await customAxios.get(LinkGen.linkShowMessage(id), config);
-      console.log(res);
       const data = parser.extractMessageContent(res.data);
       dispatch({
         type: 'pushMessageDetail', payload: {
@@ -96,6 +104,8 @@ export function getMessDetail(id) {
       });
     } catch (err) {
       console.log(err);
+    } finally {
+      dispatch({type: 'setLoading', payload: false});
     }
   }
 }

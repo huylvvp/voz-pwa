@@ -17,6 +17,7 @@ import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import TextField from '@material-ui/core/TextField';
 import Input from '@material-ui/core/Input';
 import Snackbar from '@material-ui/core/Snackbar';
+import Editor from '../../components/Reply/Editor';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -69,16 +70,7 @@ export default function Create(props) {
             style={{marginLeft:10,marginTop: 10}}
             onChange={(e)=>setThread({...thread, title: e.target.value})}
           />
-          <TextField
-            label={f2}
-            multiline
-            fullWidth
-            rows="10"
-            variant="standard"
-            required
-            style={{marginLeft:10,marginTop: 10}}
-            onChange={(e)=>setThread({...thread, content: e.target.value})}
-          />
+          <Editor label={f2} onChange={(vl)=>setThread({...thread, content: vl})} initValue={thread.content}/>
         </div>
       </Dialog>
       <div style={{border: 20}}>
