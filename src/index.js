@@ -8,8 +8,24 @@ import thunk from "redux-thunk";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { initializeFirebase } from './pushNotification';
+import {loadState,saveState} from './services/redux2local';
+import {throttle} from 'lodash';
 
-const store = createStore(reducer,applyMiddleware(thunk));
+const persistedState = loadState();
+const store = createStore(reducer, persistedState, applyMiddleware(thunk));
+store.subscribe(throttle(() => {
+  saveState({
+    ...store.getState(),
+    layout: {
+      ...store.getState().layout,
+      data: {
+        ...store.getState().layout.data,
+        thread: {},
+      }
+    }
+  });
+}, 2000));
+
 initializeFirebase();
 
 ReactDOM.render(

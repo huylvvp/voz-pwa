@@ -18,7 +18,7 @@ export default function Login(props) {
   const [input, setInput] = React.useState({
     username: '',
     password: ''
-  })
+  });
   const dispatch  = useDispatch();
   function handleClick() {
     setOpen(true);
@@ -55,9 +55,9 @@ export default function Login(props) {
                   backgroundColor: '#7986cb',
                   zoom: 1.3
                 }}
-                src={"https://forums.voz.vn/" + layout.account.avatar}
+                src={layout.account.avatar ? `https://forums.voz.vn/${layout.account.avatar}` : undefined}
               >
-                {layout.account.avatar.length > 0 ? '' : layout.account.username.chartAt(0).toUpperCase()}
+                {layout.account.username.charAt(0).toUpperCase()}
               </Avatar>
               <div style={{display: 'flex',flexDirection: 'column', justifyContent: 'center'}}>
                 <Typography variant={'h5'}>{layout.account.username}</Typography>

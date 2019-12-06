@@ -229,7 +229,7 @@ function extractMessageContent(data){
 function extractSubscription(data){
   let $ = cheerio.load(data);
   let out = [];
-  $('body > div.neo_width.page > div > table:nth-child(9) > tbody > tr > td:nth-child(3) > form:nth-child(4) > table > tbody >tr')
+  $('tr > td:nth-child(3) > form > table[class=\'tborder\'] > tbody:not([id]) >tr')
     .get().forEach(row=>{
       if (!$(row).find('> td:first-child').attr('id'))
         return;

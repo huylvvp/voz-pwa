@@ -3,6 +3,7 @@ import LinkGen from '../services/url_gen'
 import parser from '../services/parser'
 import auth from '../services/auth';
 import rq from '../services/requests';
+import history from '../helpers/history';
 import Axios from 'axios';
 const config = {
   "withCredentials" : true
@@ -30,7 +31,7 @@ export function getDataForum(forum,page) {
 export function getDataSub(page) {
   return dispatch => {
     dispatch({type: 'setLoading', payload: true});
-    customAxios.get(`/subscription.php`, config).then(response => {
+    customAxios.get(`/subscription.php?page=${page}`, config).then(response => {
       let tmp = parser.extractSubscription(response.data);
       dispatch({
         type: 'pushSubscription', payload: {
@@ -129,6 +130,12 @@ export function saveThread(id,text) {
 export function doLogin(username, password) {
   return async (dispatch) => {
     let formData = auth.getFormDataLogin(username, password);
+    dispatch({
+      type : 'doLogin',
+      payload: {
+        login: false,
+      }
+    });
     try {
       let res = await customAxios.post("/login.php?do=login", formData, config);
       if (res.status == 200  && res.data.includes("Thank you for logging in")) {
@@ -141,6 +148,7 @@ export function doLogin(username, password) {
           payload: {
             login: true,
             username: info.username,
+            password: password,
             avatar: info.avaSrc,
             isOnline: info.isOnline,
             level: info.level
@@ -148,7 +156,9 @@ export function doLogin(username, password) {
         })
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
+    } finally {
+      history.push('/home');
     }
   }
 }

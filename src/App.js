@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Router, Switch } from 'react-router-dom';
 import history from './helpers/history';
 import './App.scss';
 import Pepe from './scss/Pepe.png';
 import { askForPermissioToReceiveNotifications } from './pushNotification';
+import { useDispatch, useSelector } from 'react-redux';
+import {doLogin} from './actions/layout';
 
 const loading = () => (
   <div className="animated fadeIn pt-3 text-center">
@@ -15,6 +17,13 @@ const DefaultLayout = React.lazy(() => import('pages/DefaultLayout'));
 function App() {
   if (!localStorage.getItem('notify_token'))
     askForPermissioToReceiveNotifications();
+  const layout = useSelector(state=>state.layout);
+  const dispatch = useDispatch();
+  useEffect(()=>{
+    if (layout.login){
+      dispatch(doLogin(layout.account.username,layout.account.password));
+    }
+  },[]);
   return (
     <Router history={history}>
       <React.Suspense fallback={loading()}>

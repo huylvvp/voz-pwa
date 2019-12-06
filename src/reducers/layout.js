@@ -206,11 +206,17 @@ const ui = (state = initState, action) => {
     case 'doLogin':
       return {
         ...state,
+        data: {
+          ...state.data,
+          sub: {},
+          message: {},
+        },
         login: action.payload.login,
         account: {
-          username: action.payload.username,
-          level: action.payload.level,
-          avatar: action.payload.avatar
+          username: action.payload.username||'',
+          password: action.payload.password||'',
+          level: action.payload.level||'',
+          avatar: action.payload.avatar||''
         }
       };
     case 'search':
