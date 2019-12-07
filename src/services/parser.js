@@ -99,6 +99,7 @@ function getBasicDetails($, td) {
 
 //template postbit
 function extractPostFromDiv($, post){
+  console.log(post);
   let p = {};
   let tmp;
   if (!$(post).find('.bigusername').attr('href')){
@@ -182,13 +183,12 @@ function extractDataForum(data) {
 //template showthread
 function extractDataThread(data) {
   let $ = cheerio.load(data);
-
   let tmp;
   let output = getPageNumber($);
   output.data = [];
   output.subscribed = false;
   tmp = $('#threadtools_menu > form > table > tbody > tr:nth-child(4) > td').html();
-  if (tmp.includes('Unsubscribe'))
+  if (tmp != null && tmp.includes('Unsubscribe'))
     output.subscribed = true;
   $('#posts > div[id]').get()
     .forEach(wpost=>{

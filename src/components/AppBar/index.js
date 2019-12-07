@@ -13,6 +13,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import * as actUi from '../../actions/ui';
+import * as act from '../../actions/layout';
 import Button from '@material-ui/core/Button';
 import StarIcon from '@material-ui/icons/Star';
 import { ListItemIcon } from '@material-ui/core';
@@ -20,6 +21,7 @@ import AddIcon from '@material-ui/icons/Add';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import SubscriptionsIcon from '@material-ui/icons/Subscriptions';
 import UnsubscribeIcon from '@material-ui/icons/Unsubscribe';
+import history from '../../helpers/history';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -86,8 +88,9 @@ export default function Appbar(props) {
     dispatch(actUi.toggleSearch(!ui.openSearch));
     if (ui.openSearch){
       //search request
+      history.push(`/search/${searchRef.current.value}/1`)
     } else {
-      // searchRef.current.focus();
+      searchRef.current.focus();
     }
   }
   return (

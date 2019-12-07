@@ -63,5 +63,17 @@ function getFormSubscribe(threadId,subPage){
   bodyFormData.append('folderid', '0');
   return bodyFormData;
 }
-
-export default { getThreadsByF, getThreadData, quickReply,getFormSubscribe };
+function getFormSearch(data, query) {
+  let $ = cheerio.load(data);
+  let bodyFormData = new FormData();
+  $('#navbar_search_menu > table > tbody > tr:nth-child(2) > td > form').find('input').each((index,inp) => {
+    let $inp = $(inp);
+    if (inp.attribs.type != 'submit' && inp.name.showposts != "showposts") {
+      bodyFormData.append($inp.attr('name'), $inp.val() || '');
+    }
+  })
+  bodyFormData.set('query',query);
+  bodyFormData.set('showposts',0);
+  return bodyFormData;
+}
+export default { getThreadsByF, getThreadData, quickReply,getFormSubscribe,getFormSearch};
