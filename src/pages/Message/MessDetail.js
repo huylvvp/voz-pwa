@@ -9,7 +9,7 @@ export default function MessDetail(props) {
   let id = props.match.params.detail;
   const dispatch = useDispatch();
   const mess = useSelector(state=>state.layout.data.message[id]);
-
+  
   useEffect(()=>{
     dispatch(act.getMessDetail(id));
     dispatch({type: 'setTitle', payload: 'Message details'})

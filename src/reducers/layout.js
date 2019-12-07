@@ -37,7 +37,8 @@ const initState = {
   },
   search: {
     data: []
-  }
+  },
+  logoutPath:'',
 };
 
 const ui = (state = initState, action) => {
@@ -216,9 +217,17 @@ const ui = (state = initState, action) => {
           username: action.payload.username||'',
           password: action.payload.password||'',
           level: action.payload.level||'',
-          avatar: action.payload.avatar||''
-        }
+          avatar: action.payload.avatar||'',
+        },
+        logoutPath: action.payload.logoutPath 
       };
+    case 'doLogout' : 
+      return {
+        ...state,
+        login: action.payload.login,
+        account: action.payload.account,
+        logoutPath: action.payload.logoutPath
+      }
     case 'search':
       return {
         ...state,

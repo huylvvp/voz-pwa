@@ -10,7 +10,7 @@ export default function Subscription(props) {
   where = {...where, ... props.match.params };
   const dispatch = useDispatch();
   const sub = useSelector(state=>state.layout.data.sub);
-
+  
   useEffect(()=>{
     dispatch(act.getDataSub(where.page));
   },[props.location]);

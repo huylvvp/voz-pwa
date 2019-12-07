@@ -140,7 +140,8 @@ export function doLogin(username, password) {
       let res = await customAxios.post("/login.php?do=login", formData, config);
       if (res.status == 200  && res.data.includes("Thank you for logging in")) {
         res = await customAxios.get('/index.php',config);
-        const id = parser.getUserId(res.data);
+        let id = parser.getUserId(res.data);
+        let logoutPath = parser.getLogoutPath(res.data);
         res = await customAxios(`/member.php?u=${id}`, config);
         let info = parser.getMemberInfo(res.data);
         dispatch({
@@ -151,7 +152,8 @@ export function doLogin(username, password) {
             password: password,
             avatar: info.avaSrc,
             isOnline: info.isOnline,
-            level: info.level
+            level: info.level,
+            logoutPath: logoutPath
           }
         })
       }
@@ -199,13 +201,39 @@ export function unSubscribeThread(thread) {
   return async (dispatch)=>{
     try {
       let res = await customAxios.get(`/subscription.php?do=removesubscription&t=${thread}`, config);
-
+      
       if (res.status == 200)
         console.log('Unsubscribe thread '+thread);
       else
         console.log('Unsubcribe unsuccessfully');
     } catch (error) {
       console.log(error)
+    }
+  }
+}
+
+export function doLogout(logoutPath) {
+  return async (dispatch) => {
+    try {
+        console.log(logoutPath);
+        let res = await customAxios.get(logoutPath,config);
+        if (res.status == 200) {
+          console.log("logout successfully");
+          dispatch({
+            type:'doLogout',
+            payload: {
+              login: false,
+              account: {},
+              logoutPath: ''
+            }
+        
+          })
+        } else {
+          console.log("oh no, logout unsuccessfully");
+        }
+        
+    } catch (error) {
+      console.log(error);
     }
   }
 }

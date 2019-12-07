@@ -12,8 +12,15 @@ function getUserId(data){
   }
   return false;
 }
-
-function getPageNumber($) {
+function getLogoutPath(data) {
+  let $ = cheerio.load(data);
+  let tmp = $('body > div.neo_width.page > div:nth-child(1) > div.tborder > table > tbody > tr > td:nth-child(8) > a');
+  let path = tmp.attr('href');
+  console.log (tmp); 
+  console.log(path);
+  return path;
+}
+function getPageNumber($) { 
   let tmp = $('.pagenav td.vbmenu_control[style]').html();
   if (tmp)
     return {
@@ -295,6 +302,7 @@ function getMemberInfo(data) {
   return out;
 }
 export default {
-  extractDataForum,extractDataThread, getUserId, extractDataInbox, extractMessageContent, extractSubscription,extractSearchContent,
+  extractDataForum,extractDataThread, getUserId, getLogoutPath, extractDataInbox, 
+  extractMessageContent, extractSubscription,extractSearchContent,
   getMemberInfo
 };

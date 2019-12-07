@@ -9,6 +9,7 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import CallMissedOutgoingIcon from '@material-ui/icons/CallMissedOutgoing';
 import Login from './Login';
 import * as actUi from '../../actions/ui';
+import * as act from '../../actions/layout'
 import history from '../../helpers/history';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -19,11 +20,12 @@ import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import PaymentIcon from '@material-ui/icons/Payment';
-
+import ExitToApp from '@material-ui/icons/ExitToApp';
 export default function LeftDrawer() {
   const dispatch = useDispatch();
   const [val,setVal] = React.useState(17);
   const login = useSelector(state => state.layout.login);
+  const logoutPath = useSelector(state => state.layout.logoutPath);
   const [openDialog, setOpen] = React.useState(false);
 
   function homeClick(){
@@ -45,7 +47,9 @@ export default function LeftDrawer() {
     history.push(`/forum/${forum}`);
     dispatch(actUi.toggleDrawer('left',false));
   }
-
+  function logoutClick() {
+    dispatch(act.doLogout(logoutPath));
+  }
   function handleClose(){
     setOpen(false);
   }
@@ -165,6 +169,12 @@ export default function LeftDrawer() {
           <ListItemIcon><PaymentIcon/></ListItemIcon>
           <ListItemText primary={'Donate'}/>
         </ListItem>
+        }
+        {login &&
+          <ListItem button onClick={logoutClick}>
+            <ListItemIcon><ExitToApp /></ListItemIcon>
+            <ListItemText primary={'Log out'}/>
+          </ListItem>
         }
         <Divider/>
       </List>
